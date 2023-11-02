@@ -1,0 +1,84 @@
+$gm_name = 'Mestre'
+
+$player_name = 'Fulano'
+$player_xp = 0
+$player_statuses = [
+  {
+    name: 'poison',
+    influence: -2,
+    skills: ['Do anything']
+  },
+  {
+    name: 'leg day',
+    influence: 2,
+    skills: ['Run', 'Walk']
+  }
+]
+
+$player_skills = [
+  {
+    name: "Do anything",
+    level: 1,
+    subskills: [
+      {
+        name: "Walk",
+        level: 2,
+        subskills: [
+          {
+            name: "Walk at home",
+            level: 3
+          }
+        ]
+      },
+      {
+        name: "Run",
+        level: 2,
+        subskills: []
+      }
+    ]
+  }
+]
+
+$player_history = []
+
+require_relative 'player_display'
+require_relative 'dm_roll'
+require_relative 'player_increase_level'
+require_relative 'player_add_status'
+require_relative 'player_remove_status'
+require_relative 'player_roll'
+# Now all of my methods are inside a module. I can only expose them by extending the modules.
+
+extend PlayerDisplay
+extend DmRoll
+extend PlayerIncreaseLevel
+extend PlayerAddStatus
+extend PlayerRemoveStatus
+extend PlayerAddStatus
+extend PlayerRollForSkill
+
+# even though we extend, it's still like we're using only one big file.
+# cohision is the degree of elements belong to each other. there are still too many things that depend on each other.
+
+print_skills('Fulano', $player_skills)
+
+player_roll_for_skill($player_skills[0][:subskills][0])
+player_roll_for_skill($player_skills[0])
+
+dm_roll(3)
+
+new_subskill = { name: "Walk at home while sleepy", level: 4 }
+increase_level($player_skills, "Walk at home", new_subskill)
+
+new_status = {
+  name: 'bleeding',
+  influence: -3,
+  skills: ['Do anything']
+}
+
+add_status(new_status)
+remove_status('poison')
+
+player_roll_for_skill($player_skills[0][:subskills][0])
+
+player_print_history
