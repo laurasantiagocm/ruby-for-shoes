@@ -39,6 +39,8 @@ $player_skills = [
   }
 ]
 
+$player_history = []
+
 def player_display_not_allowed
   p "Display not allowed for different players"
 end
@@ -113,6 +115,12 @@ def player_roll_for_skill(skill)
   result = die_rolls.sum
   p "#{result} (#{die_rolls.join(' + ')})"
   result
+
+  if die_rolls.all? { |roll| roll == 6 }
+    p "Todos 6!! Pode adicionar uma skill nova."
+  end
+
+  $player_history << { type: '🎲 roll', result: result, note: "affected by #{affecting_statuses.map{ |s| s[:name]}.join(', ')}" }
 end
 
 player_roll_for_skill($player_skills[0][:subskills][0])
@@ -167,6 +175,8 @@ def increase_level(structure, target_subskill_name, new_subskill)
     return player_display_not_found_skill(target_subskill_name)
   end
 
+  $player_history << { type: '⏫ increase', skill: new_subskill[:name] }
+
   print_skills('Fulano', $player_skills)
 end
 
@@ -182,12 +192,16 @@ new_status = {
 def add_status(status)
   $player_statuses << status
   puts "Status #{status[:name]} was added."
+  $player_history << { type: '➕ add status', status: status[:name] }
+
   player_display_status
 end
 
 def remove_status(status_name)
   $player_statuses = $player_statuses.select { |s| s[:name] != status_name }
   puts "Status #{status_name} was removed."
+  $player_history << { type: '➖ remove status', status: status_name }
+
   player_display_status
 end
 
@@ -195,3 +209,12 @@ add_status(new_status)
 remove_status('poison')
 
 player_roll_for_skill($player_skills[0][:subskills][0])
+
+def player_print_history
+  p "Player history:"
+  $player_history.each do |action|
+    puts "#{action.map {|key, val| "#{key}: #{val} |" }.join(' ')}"
+  end
+end
+
+player_print_history
