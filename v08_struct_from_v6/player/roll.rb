@@ -50,7 +50,7 @@ module Player
         p "Todos 6!! Pode adicionar uma skill nova."
       end
     
-      player.history << { type: '🎲 roll', result: result, note: "affected by #{affecting_statuses.map{ |s| s[:name]}.join(', ')}" }
+      player.history << { type: "🎲 roll (#{skill_name})", result: result, note: "affected by #{affecting_statuses.map{ |s| s[:name]}.join(', ')}" }
     end
   end
 end
