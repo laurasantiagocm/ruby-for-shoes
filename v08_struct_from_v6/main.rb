@@ -48,8 +48,8 @@ player.skills = [
 
 Player::Display.skills(player, 'Fulano', player.skills)
 
-Player::RollForSkill.call(player, player.skills[0][:subskills][0])
-Player::RollForSkill.call(player, player.skills[0])
+Player::RollForSkill.call(player, 'Walk')
+Player::RollForSkill.call(player, 'Do anything')
 
 Dm::Roll.call(3)
 
@@ -65,6 +65,6 @@ new_status = {
 Player::AddStatus.call(player, new_status)
 Player::RemoveStatus.call(player, 'poison')
 
-Player::RollForSkill.call(player, player.skills[0][:subskills][0])
+Player::RollForSkill.call(player, "Walk at home")
 
 Player::Display.history(player)
